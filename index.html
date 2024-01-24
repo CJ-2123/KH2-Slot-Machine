@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slot Machine</title>
+  <style>
+    body{
+        background-color: #333;
+        box-sizing: border-box;
+        max-width: 500px;
+        margin: auto;
+        padding: 10px;
+    }
+    .slot-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .slot {
+      width: 100px;
+      height: 100px;
+      border: 1px solid #333;
+      overflow: hidden;
+      position: relative;
+    }
+    .slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+    }
+    .text, .counter {
+        font-size: 50px;
+        text-align: center;
+        color: white;
+    }
+    td {
+        color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slots -->
+<div id="slotMachine" class="slot-container">
+  <div class="slot" id="slot1">
+    <img src="images/proof_nonexistence.png" alt="Image 1">
+  </div>
+  <div class="slot" id="slot2">
+    <img src="images/proof_nonexistence.png" alt="Image 2">
+  </div>
+  <div class="slot" id="slot3">
+    <img src="images/proof_nonexistence.png" alt="Image 3">
+  </div>
+</div>
+
+<!-- Spin Button -->
+<button id="spin" onclick="toggleSlotMachine()">Spin</button>
+
+<!-- Text and Counter-->
+<div id="winText" class="text">
+    Spin to win!
+</div>
+<div class="counter">
+    <p>Spins: <span id="spinCount" class="text">0</span></p>
+</div>
+
+
+<br>
+
+<!-- Table with Images Explaning Checks -->
+<table width="50%">
+    <tr>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr>
+        <td><img src="images/ansem_report.png" width="100px"></td>
+        <td>13 Ansem Reports</td>
+        <td><img src="images/Summon.png" width="100px"></td>
+        <td>4 Summons</td>
+    </tr>
+    <tr>
+        <td><img src="images/Magic.png" width="100px"></td>
+        <td>18 Magic</td>
+        <td><img src="images/proof_nonexistence.png" width="100px"></td>
+        <td>3 Proofs</td>
+    </tr>
+    <tr>
+        <td><img src="images/torn_pages.png" width="100px"></td>
+        <td>5 Torn Pages</td>
+        <td><img src="images/visitlock.png" width="100px"></td>
+        <td>11 Visit Locks</td>
+    </tr>
+    <tr>
+        <td><img src="images/Drive_Form.png" width="100px"></td>
+        <td>5 Drive Forms</td>
+    </tr>
+</table>
+
+<script>
+  const images = [
+    "images/ansem_report.png",
+    "images/visitlock.png",
+    "images/Magic.png",
+    "images/proof_nonexistence.png",
+    "images/Summon.png",
+    "images/torn_pages.png",
+    "images/Drive_Form.png",
+  ];
+
+  let spinning = false;
+  let spinCounter = 0;
+
+  // After pressing spin, change text, update counter
+  function toggleSlotMachine() {
+    if (!spinning) {
+      winText.innerHTML = "Spinning...";
+      spinning = true;
+      spinCounter++;
+      spin();
+      setTimeout(stopSpin, 2000); // Adjust the duration of spinning
+    }
+  }
+
+  function spin() {
+    const slots = document.querySelectorAll('.slot');
+    slots.forEach(slot => {
+      const randomIndex = Math.floor(Math.random() * images.length);
+      const randomImage = images[randomIndex];
+      slot.innerHTML = `<img src="${randomImage}" alt="Slot Image">`;
+    });
+
+    setTimeout(() => {
+      if (spinning) {
+        spin();
+      }
+    }, 100);
+  }
+
+  // Change text, disable button if win
+  function stopSpin() {
+    spinning = false;
+
+    spinCount.innerHTML = spinCounter;
+    if(slot1.innerHTML == slot2.innerHTML && slot2.innerHTML == slot3.innerHTML) {
+        winText.innerHTML = "WIN";
+        const button = document.getElementById("spin");
+        button.disabled = true;
+    }
+    else {
+        winText.innerHTML = "LOSE";
+    }
+  }
+
+  
+</script>
+
+</body>
+</html>
